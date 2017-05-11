@@ -74,13 +74,13 @@ module.exports = function(kbnServer) {
         xforward: true,
         passThrough: true,
         timeout: kbnServer.config().get('elasticsearch.requestTimeout'),
-        modifyPayload: modifyPayload(kbnServer),
+
         onResponse: function (err, response, request, reply) {
           if (err) {
             reply(err);
             return;
           }
-
+        var payload =  modifyPayload(kbnServer);
           Wreck.read(response, { json: true }, function (err, payload) {
             if (kbnServer.config().get('own_home.get_username_from_session.enabled')) {
               if (payload && payload.toString() == 'Unauthorized') {
